@@ -18,4 +18,4 @@ jobs:
     - name: Log in to Docker Hub
       run: docker login --username icedbot --password ${{ secrets.ACCESS_TOKEN }}
     - name: Publish image
-      run: docker publish icedrs/iced:${{ matrix.image }}
+      run: docker push icedrs/iced:${{ matrix.image }}

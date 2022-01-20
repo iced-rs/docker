@@ -1,0 +1,21 @@
+name: Publish
+on:
+  push:
+    branches:
+      - master
+jobs:
+  all:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        image: [aarch64, armv7]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build image
+      run: docker build -t icedrs/iced:${{ matrix.image }} -f Dockerfile.${{ matrix.image }} .
+    - name: Log in to Docker Hub
+      run: docker login --username icedbot --password ${{ secrets.ACCESS_TOKEN }}
+    - name: Publish image
+      run: docker publish icedrs/iced:${{ matrix.image }}
